@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root to: 'prospects#index'
   resources :prospects, only: [ :index ]
   resources :packages, only: [ :index ]
+  resources :cities, only: [ :index ]
 end
