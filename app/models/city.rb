@@ -9,4 +9,8 @@ class City
   def self.all
     Prospect.all.map(&:delivery_city).uniq.map{ |name| City.new(name) }
   end
+
+  def self.find_by_name(name)
+    City.all.detect{ |city| city.name == name }
+  end
 end

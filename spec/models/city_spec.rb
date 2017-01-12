@@ -16,4 +16,16 @@ RSpec.describe City, :type => :model do
       is_expected.to all(be_a(City))
     end
   end
+
+  describe 'find_by_name' do
+    subject { City.find_by_name('Paris') }
+    it 'returns a city' do
+      expect(Prospect).to receive(:all).exactly(4).times.and_return(prospects)
+      expect(prospect1).to receive(:next_package).and_return(Package.new(code: 'pk1', contents: [ '2a', '2b' ]))
+      expect(prospect2).to receive(:next_package).and_return(nil)
+      expect(prospect3).to receive(:next_package).and_return(Package.new(code: 'pk3', contents: [ '1a', '1b' ]))
+      is_expected.to be_a(City)
+      expect(subject.name).to eq 'Paris'
+    end
+  end
 end

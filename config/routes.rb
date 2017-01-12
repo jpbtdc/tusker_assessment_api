@@ -6,5 +6,5 @@ Rails.application.routes.draw do
     get :available_packages
   end
   resources :packages, only: [ :index ]
-  resources :cities, only: [ :index ]
+  resources :cities, only: [ :index, :show ]
 end
