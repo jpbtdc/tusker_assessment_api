@@ -13,3 +13,5 @@ Assume want an endpoint per prospect which includes showing a list of all availa
 * Packages endpoint: `/packages`
 * Cities endpoint: `/cities`
 * Prospect endpoint: `/prospects/:contact` e.g. `/prospects/Steve`
+* Next Package endpoint: `/prospects/:contact/next_package`
+* Available Packages endpoint: `/prospects/:contact/available_packages`
