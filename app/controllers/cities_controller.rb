@@ -12,4 +12,13 @@ class CitiesController < ApplicationController
       render json: city
     end
   end
+
+  def packages
+    city = City.find_by_name(params[:city_id])
+    if city.blank?
+      render json: {error: 'not-found'}.to_json, status: :not_found
+    else
+      render json: city.packages
+    end
+  end
 end
