@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: 'prospects#index'
-  resources :prospects, only: [ :index ]
+  resources :prospects, only: [ :index, :show ]
   resources :packages, only: [ :index ]
   resources :cities, only: [ :index ]
 end

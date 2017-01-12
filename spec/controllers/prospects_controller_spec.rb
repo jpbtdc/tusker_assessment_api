@@ -19,4 +19,22 @@ RSpec.describe ProspectsController, type: :controller do
       expect(json[2][:next_package]).to be_nil
     end
   end
+
+  describe "GET #show" do
+    context "when prospect exists" do
+      it "renders prospect" do
+        expect(Prospect).to receive(:all).and_return(prospects)
+        get :show, params: { id: prospect3.contact }
+        expect(response).to be_success
+      end
+    end
+
+    context "when prospect does exists" do
+      it "renders not found" do
+        expect(Prospect).to receive(:all).and_return(prospects)
+        get :show, params: { id: 'Zach' }
+        expect(response.status).to be(404)
+      end
+    end
+  end
 end

@@ -1,13 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Prospect, :type => :model do
-  let(:prospects) {
-    [
-      { contact: "Alice", received: [ '1a', '1b' ], delivery_city: 'London' },
-      { contact: "Bruce", received: [ '2a', '2b' ], delivery_city: 'Paris' },
-      { contact: "Clare", received: [ '3a', '3b' ], delivery_city: 'New York' }
-    ].to_json
-  }
+  let(:prospect1) { Prospect.new(contact: 'Alice', received: [ '1a', '1b' ], delivery_city: 'London') }
+  let(:prospect2) { Prospect.new(contact: 'Bruce', received: [ '2a', '2b' ], delivery_city: 'Paris') }
+  let(:prospect3) { Prospect.new(contact: 'Clare', received: [ '3a', '3b' ], delivery_city: 'New York') }
+  let(:prospects) { [ prospect1, prospect2, prospect3 ].to_json }
+
+  describe 'find_by_contact' do
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
+    subject { Prospect.find_by_contact('Clare') }
+    it { is_expected.to eq(prospect3) }
+  end
 
   describe 'all' do
     before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
