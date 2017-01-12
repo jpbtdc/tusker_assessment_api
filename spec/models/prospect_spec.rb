@@ -9,14 +9,16 @@ RSpec.describe Prospect, :type => :model do
     ].to_json
   }
 
+  let(:options) { { "Authorization"=>"Basic dXNlcm5hbWU6dHVza2VybWFydmVs", "Accept"=>"application/json" } }
+
   describe 'all' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", {}, prospects } }
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", options, prospects } }
     subject { Prospect.all }
     it { is_expected.to all(be_a(Prospect)) }
   end
 
   describe 'next_package' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", {}, prospects } }
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", options, prospects } }
     subject { Prospect.all.detect{ |p| p.contact == 'Alice' }.next_package }
 
     context 'when package exists where content not already received' do
