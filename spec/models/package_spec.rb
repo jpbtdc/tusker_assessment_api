@@ -10,7 +10,7 @@ RSpec.describe Package, :type => :model do
   }
 
   describe 'all' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", { "Authorization"=>"Basic dXNlcm5hbWU6dHVza2VybWFydmVs", "Accept"=>"application/json" }, packages } }
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", TuskerMarvelResourceHelpers.headers, packages } }
     subject { Package.all }
     it { is_expected.to all(be_a(Package)) }
   end
