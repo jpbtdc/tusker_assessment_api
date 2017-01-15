@@ -12,10 +12,22 @@ RSpec.describe Prospect, :type => :model do
     it { is_expected.to eq(prospect3) }
   end
 
+  describe 'find_by_delivery_city' do
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
+    subject { Prospect.find_by_delivery_city('Paris') }
+    it { is_expected.to eq [ prospect2 ] }
+  end
+
   describe 'all' do
     before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
     subject { Prospect.all }
     it { is_expected.to all(be_a(Prospect)) }
+  end
+
+  describe 'delivery_cities' do
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
+    subject { Prospect.delivery_cities }
+    it { is_expected.to eq [ 'London', 'Paris', 'New York' ] }
   end
 
   describe 'next_package' do
