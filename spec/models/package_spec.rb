@@ -14,4 +14,27 @@ RSpec.describe Package, :type => :model do
     subject { Package.all }
     it { is_expected.to all(be_a(Package)) }
   end
+
+  describe 'find_by_missing_contents' do
+    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", TuskerMarvelResourceHelpers.headers, packages } }
+    subject { Package.find_by_missing_contents([ '1a', '2b' ]) }
+    it { is_expected.to all(be_a(Package)) }
+    it { expect(subject.length).to eq 1 }
+  end
+
+  describe 'includes_contents?' do
+    let(:package) { Package.new(code: 'pk1', contents: [ '1a', '1b', '1c' ]) }
+    context 'when includes all contents' do
+      subject { package.includes_contents? [ '1a', '1b' ] }
+      it { is_expected.to be true }
+    end
+    context 'when includes some contents' do
+      subject { package.includes_contents? [ '1a', '2a' ] }
+      it { is_expected.to be true }
+    end
+    context 'when includes no contents' do
+      subject { package.includes_contents? [ '2a', '2b' ] }
+      it { is_expected.to be false }
+    end
+  end
 end
