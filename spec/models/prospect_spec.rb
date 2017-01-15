@@ -6,33 +6,30 @@ RSpec.describe Prospect, :type => :model do
   let(:prospect3) { Prospect.new(contact: 'Clare', received: [ '3a', '3b' ], delivery_city: 'New York') }
   let(:prospects) { [ prospect1, prospect2, prospect3 ].to_json }
 
+  before(:each) { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
+
   describe 'find_by_contact' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
     subject { Prospect.find_by_contact('Clare') }
     it { is_expected.to eq(prospect3) }
   end
 
   describe 'find_by_delivery_city' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
     subject { Prospect.find_by_delivery_city('Paris') }
     it { is_expected.to eq [ prospect2 ] }
   end
 
   describe 'all' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
     subject { Prospect.all }
     it { is_expected.to all(be_a(Prospect)) }
   end
 
   describe 'delivery_cities' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
     subject { Prospect.delivery_cities }
     it { is_expected.to eq [ 'London', 'Paris', 'New York' ] }
   end
 
   describe 'next_package' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/prospects.json", TuskerMarvelResourceHelpers.headers, prospects } }
-    subject { Prospect.all.detect{ |p| p.contact == 'Alice' }.next_package }
+    subject { prospect1.next_package }
 
     context 'when package exists where content not already received' do
       let(:package1) { Package.new(code: 'pk1', contents: [ '1a', '2b' ]) }

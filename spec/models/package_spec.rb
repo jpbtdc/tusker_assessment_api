@@ -9,14 +9,14 @@ RSpec.describe Package, :type => :model do
     ].to_json
   }
 
+  before(:each) { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", TuskerMarvelResourceHelpers.headers, packages } }
+
   describe 'all' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", TuskerMarvelResourceHelpers.headers, packages } }
     subject { Package.all }
     it { is_expected.to all(be_a(Package)) }
   end
 
   describe 'find_by_missing_contents' do
-    before { ActiveResource::HttpMock.respond_to { |mock| mock.get "/packages.json", TuskerMarvelResourceHelpers.headers, packages } }
     subject { Package.find_by_missing_contents([ '1a', '2b' ]) }
     it { is_expected.to all(be_a(Package)) }
     it { expect(subject.length).to eq 1 }
